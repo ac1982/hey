@@ -16,6 +16,7 @@ package requester
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -144,7 +145,7 @@ func TestResponseBodyReadError(t *testing.T) {
 	work.Init()
 	work.makeRequest(server.Client())
 	result := <-work.results
-	if result.err != io.ErrUnexpectedEOF {
+	if !errors.Is(result.err, io.ErrUnexpectedEOF) {
 		t.Fatalf("truncated response error = %v, want %v", result.err, io.ErrUnexpectedEOF)
 	}
 }
